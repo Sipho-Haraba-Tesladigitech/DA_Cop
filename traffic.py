@@ -15,10 +15,7 @@ from detector import detection
 import pandas as pd
 
 app = flask.Flask(__name__)   #Initialize the creation of the flask web app
-df = pd.DataFrame({
-                    "url": [],
-                    "results": []
-                })
+
 
 class URLAPI(Resource):  #Inherit the CRUD operations from the Resource class
     def get(self):   #only create the get operation
@@ -32,11 +29,10 @@ class URLAPI(Resource):  #Inherit the CRUD operations from the Resource class
                     "url": url,
                     "results": res
                 }
-                df.loc[len(df)] = response
-                f = open("Tested Urls.csv", "a")
-                df.to_csv(f, ",")
-                f.close()
 
+                f = open("Tested Urls.csv", "a")
+                f.write(f"\n{url},{res}")
+                f.close()
                 return response
             else:
                 return {"results": "Error: URL parameter is missing"}, 400
