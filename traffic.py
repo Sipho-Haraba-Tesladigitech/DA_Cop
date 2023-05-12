@@ -12,9 +12,13 @@ import flask
 from flask_restful import Resource, Api, reqparse
 from flask import request
 from detector import detection
+import pandas as pd
 
 app = flask.Flask(__name__)   #Initialize the creation of the flask web app
-api = Api(app) #Wrap the app in an api to expose only the relevant functionality
+df = pd.DataFrame({
+                    "url": [],
+                    "results": []
+                })
 
 class URLAPI(Resource):  #Inherit the CRUD operations from the Resource class
     def get(self):   #only create the get operation
@@ -24,24 +28,37 @@ class URLAPI(Resource):  #Inherit the CRUD operations from the Resource class
                 # perform your logic here
                 res = detection(url)
                 print(url, res)
-                return {
+                response = {
                     "url": url,
                     "results": res
                 }
+                df.loc[len(df)] = response
+                f = open("Tested Urls.csv", "a")
+                df.to_csv(f, ",")
+                f.close()
+
+                return response
             else:
                 return {"results": "Error: URL parameter is missing"}, 400
         except Exception as e:
-            return {"results": f"Error: {e}"}
+            return {"url": f"Error: {e}", "results": "good"}
 
-        # parser = reqparse.RequestParser()   #Used to get the parameters from the url
-        # parser.add_argument('url', type=str)  #Set the name of the parameters and their data type, to avoid reading it as code
-        # # arguments = parser.parse_args() #Store the arguments/parameters
-        # print(parser)
-        # res = "Not correct"#detection(arguments['url']) #Pass the parameters to detection and get the label
-        # # print(arguments['url'], res)
-        # return res   #Return the classification label to the end user
+
+api = Api(app) #Wrap the app in an api to expose only the relevant functionality
+
+
+class TestedURLApi(Resource):  #Inherit the CRUD operations from the Resource class
+    def get(self):
+        with open("Tested Urls.csv", "r") as f:
+            response = ""
+            for line in f.readlines():
+                response += line
+
+            return response
+
 
 api.add_resource(URLAPI, '/url', endpoint='url')     #Expose the api endpoint
+api.add_resource(TestedURLApi, '/Tested_Urls.csv')
 
 
 print("Server Started, Listening for upcoming connections")
