@@ -1,3 +1,4 @@
 # Driveby-attack
 
-To be able to run the proxy, you must install Tor browser first(https://www.torproject.org/download/)
+To run the server execute the following command:
+gunicorn app:src/main.py
