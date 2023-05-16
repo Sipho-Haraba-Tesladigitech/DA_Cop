@@ -26,7 +26,7 @@ class URLApi(Resource):
         try:
             url = request.args.get('url')
             if url is not None:
-                output = subprocess.run(["./asserts/extractor.exe",
+                output = subprocess.run(["java", "-jar", "../asserts/extractor.jar",
                                          '-r', url], stdout=subprocess.PIPE).stdout.decode('utf-8')
                 if not output.startswith("Error"):
                     feat_values = eval(output)
@@ -37,14 +37,14 @@ class URLApi(Resource):
                         "results": res
                     }
 
-                    f = open("./asserts/Tested Urls.csv", "a")
+                    f = open("../asserts/Tested Urls.csv", "a")
                     f.write(f"\n{url},{res}")
                     f.close()
                     return response
                 elif output.endswith("connect\r\n"):
                     response = {
                         "url": url,
-                        "results": "good"
+                        "results": "connection timed out"
                     }
                     return response
                 else:
@@ -59,7 +59,7 @@ class URLApi(Resource):
 # Inherit the CRUD operations from the Resource class
 class TestedURLApi(Resource):
     def get(self):
-        with open("./asserts/Tested Urls.csv", "r") as f:
+        with open("../asserts/Tested Urls.csv", "r") as f:
             response = ""
             for line in f.readlines():
                 response += line
