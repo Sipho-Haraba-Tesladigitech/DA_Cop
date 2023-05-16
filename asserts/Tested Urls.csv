@@ -1,14 +1,3 @@
-url,results
-https://google.com,good
-https://latest-source-code.d3067varx3e2v5.amplifyapp.com/sign-in,good
-https://pypi.org,good
-https://pypi.org,good
-https://pypi.org,good
-https://pypi.org,good
-https://pypi.org,good
-https://latest-source-code.d3067varx3e2v5.amplifyapp.com/sign-in,good
-https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1,good
-https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1,good
-https://www.torproject.org/download/,good
-http://3.84.39.220:8501/,good
-http://3.84.39.220:8501/,good
+url,results,date
+https://www.gnu.org/proprietary/malware-webpages.en.html,good,2023-05-16 09:59:09.806608
+https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1,good,2023-05-16 09:59:40.941781

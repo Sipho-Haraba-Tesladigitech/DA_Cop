@@ -7,6 +7,7 @@ Created on Wed Nov  9 10:59:11 2022
 
 The api endpoint which is exposed to the end user
 """
+import datetime
 import json
 import subprocess
 
@@ -26,19 +27,20 @@ class URLApi(Resource):
         try:
             url = request.args.get('url')
             if url is not None:
-                output = subprocess.run(["java", "-jar", "../asserts/extractor.jar",
+                output = subprocess.run(["java", "-jar", "./asserts/extractor.jar",
                                          '-r', url], stdout=subprocess.PIPE).stdout.decode('utf-8')
                 if not output.startswith("Error"):
                     feat_values = eval(output)
                     res = detection(feat_values)
-                    print(url, res)
+                    date = datetime.datetime.now()
+                    print(url, res, date)
                     response = {
                         "url": url,
                         "results": res
                     }
 
-                    f = open("../asserts/Tested Urls.csv", "a")
-                    f.write(f"\n{url},{res}")
+                    f = open("./asserts/Tested Urls.csv", "a")
+                    f.write(f"\n{url},{res},{date}")
                     f.close()
                     return response
                 elif output.endswith("connect\r\n"):
@@ -59,7 +61,7 @@ class URLApi(Resource):
 # Inherit the CRUD operations from the Resource class
 class TestedURLApi(Resource):
     def get(self):
-        with open("../asserts/Tested Urls.csv", "r") as f:
+        with open("./asserts/Tested Urls.csv", "r") as f:
             response = ""
             for line in f.readlines():
                 response += line
