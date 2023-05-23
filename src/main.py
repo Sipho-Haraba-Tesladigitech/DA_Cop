@@ -43,19 +43,19 @@ class URLApi(Resource):
                     f.write(f"\n{url},{res},{date}")
                     f.close()
                     return response
-                elif output.endswith("connect\r\n"):
-                    response = {
-                        "url": url,
-                        "results": "connection timed out"
-                    }
-                    return response
+                # elif output.endswith("connect\r\n"):
+                #     response = {
+                #         "url": url,
+                #         "results": "connection timed out"
+                #     }
+                #     return response
                 else:
-                    return {"results": f"{output}"}
+                    return {"url": url, "results": f"{output}"}
 
             else:
-                return {"results": "Error: URL parameter is missing"}, 400
+                return {"url": "none", "results": "Error: URL parameter is missing"}, 400
         except Exception as e:
-            return {"results": f"Error: {e}"}, 404
+            return {"url": 'none', "results": f"{e}"}, 404
 
 
 # Inherit the CRUD operations from the Resource class
